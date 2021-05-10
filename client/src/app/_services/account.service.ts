@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import {map} from 'rxjs/operators';
 import { User } from '../_models/User';
 
@@ -21,6 +21,7 @@ constructor(private http: HttpClient) { }
       map((response : User)=>{
         const user=response;
         if(user){
+        
           localStorage.setItem('user',JSON.stringify(user));
           this.currentUserSource.next(user);
         }
@@ -52,4 +53,5 @@ register(model:any){
     
     this.currentUserSource.next(null!);
   }
+  
 }

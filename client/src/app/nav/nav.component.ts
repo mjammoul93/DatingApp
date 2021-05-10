@@ -1,5 +1,11 @@
 import { trigger } from '@angular/animations';
+import { analyzeAndValidateNgModules } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { User } from '../_models/User';
 import { AccountService } from '../_services/account.service';
 
 @Component({
@@ -11,25 +17,31 @@ export class NavComponent implements OnInit {
 
   model:any = {}
   loggedIn :boolean=false;
-  constructor(public accountService: AccountService) { }
+  //currentUser$: Observable<User>;
+
+  constructor(public accountService: AccountService , private router:Router,private toastr: ToastrService ) { }
 
   ngOnInit():void {
     
   }
   login(){
-    this.accountService.login(this.model).subscribe(response=>
+     this.accountService.login(this.model).subscribe(response=>
       {
-        console.log(response);
-     }
+        this.router.navigateByUrl('/members');
+      }
       ,
-      error => {console.log(error)});
-    console.log(this.model);
+      error => {
+        console.log(error);
+        this.toastr.error(error.error);
+      });
+   // console.log(this.model);
   }
   logout(){
     console.log("logout called");
     this.accountService.logout();
-  
+    this.router.navigateByUrl('/');
   }
 
+ 
 
 }
